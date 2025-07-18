@@ -33,6 +33,8 @@ class Game(BaseModel):
     difficulty: str
     game_active: bool
     winner: str | None = None
+    score_x: int = 0
+    score_o: int = 0
 
 @app.post("/games", response_model=Game)
 def create_game(game: Game):
@@ -41,8 +43,8 @@ def create_game(game: Game):
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute(
-            "INSERT INTO games (board, human_player, ai_player, current_player, difficulty, game_active, winner) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id",
-            (json.dumps(game.board), game.human_player, game.ai_player, game.current_player, game.difficulty, game.game_active, game.winner)
+            "INSERT INTO games (board, human_player, ai_player, current_player, difficulty, game_active, winner, score_x, score_o) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id",
+            (json.dumps(game.board), game.human_player, game.ai_player, game.current_player, game.difficulty, game.game_active, game.winner, game.score_x, game.score_o)
         )
         game.id = cur.fetchone()[0]
         conn.commit()
@@ -60,7 +62,7 @@ def get_game(game_id: int):
     try:
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("SELECT id, board, human_player, ai_player, current_player, difficulty, game_active, winner FROM games WHERE id = %s", (game_id,))
+        cur.execute("SELECT id, board, human_player, ai_player, current_player, difficulty, game_active, winner, score_x, score_o FROM games WHERE id = %s", (game_id,))
         game_data = cur.fetchone()
         if not game_data:
             raise HTTPException(status_code=404, detail="Game not found")
@@ -72,7 +74,9 @@ def get_game(game_id: int):
             current_player=game_data[4],
             difficulty=game_data[5],
             game_active=game_data[6],
-            winner=game_data[7]
+            winner=game_data[7],
+            score_x=game_data[8],
+            score_o=game_data[9]
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving game: {e}")
@@ -88,8 +92,8 @@ def update_game(game_id: int, game: Game):
         conn = get_db_connection()
         cur = conn.cursor()
         cur.execute(
-            "UPDATE games SET board = %s, human_player = %s, ai_player = %s, current_player = %s, difficulty = %s, game_active = %s, winner = %s WHERE id = %s",
-            (json.dumps(game.board), game.human_player, game.ai_player, game.current_player, game.difficulty, game.game_active, game.winner, game_id)
+            "UPDATE games SET board = %s, human_player = %s, ai_player = %s, current_player = %s, difficulty = %s, game_active = %s, winner = %s, score_x = %s, score_o = %s WHERE id = %s",
+            (json.dumps(game.board), game.human_player, game.ai_player, game.current_player, game.difficulty, game.game_active, game.winner, game.score_x, game.score_o, game_id)
         )
         conn.commit()
         return game
@@ -121,6 +125,10 @@ def ai_move_endpoint(game: Game):
     if game_instance.check_win(game_instance.ai_player):
         game_instance.game_active = False
         game_instance.winner = game_instance.ai_player
+        if game_instance.ai_player == 'X':
+            game.score_x += 1
+        else:
+            game.score_o += 1
     elif game_instance.is_board_full():
         game_instance.game_active = False
         game_instance.winner = "tie"

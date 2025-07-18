@@ -36,7 +36,9 @@ def create_table():
                 current_player VARCHAR(1) NOT NULL,
                 difficulty VARCHAR(10) NOT NULL,
                 game_active BOOLEAN NOT NULL,
-                winner VARCHAR(1)
+                winner VARCHAR(1),
+                score_x INTEGER DEFAULT 0,
+                score_o INTEGER DEFAULT 0
             );
         """)
         conn.commit()
@@ -46,5 +48,3 @@ def create_table():
     finally:
         if conn:
             conn.close()
-
-
