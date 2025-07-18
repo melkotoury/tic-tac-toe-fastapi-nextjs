@@ -31,19 +31,29 @@ A modern, interactive Tic Tac Toe game built with vanilla HTML, CSS, and JavaScr
 ### Installation
 
 1. Clone the repository:
-   git clone https://github.com/yourusername/tic-tac-toe.git
+   ```bash
+   git clone https://github.com/melkotoury/tic-tac-toe.git
+   ```
 
 2. Navigate to the project directory:
+   ```bash
    cd tic-tac-toe
+   ```
 
 3. Open `index.html` in your web browser:
 
-On macOS
-open index.html
-On Windows
-start index.html
-On Linux
-xdg-open index.html
+   On macOS
+   ```bash
+   open index.html
+   ```
+   On Windows
+   ```bash
+   start index.html
+   ```
+   On Linux
+   ```bash
+   xdg-open index.html
+   ```
 
 
 Or simply double-click the `index.html` file in your file explorer.
@@ -58,7 +68,14 @@ Or simply double-click the `index.html` file in your file explorer.
 
 ## 📁 Project Structure
 
-tic-tac-toe/ ├── index.html          # Main HTML file ├── styles.css          # CSS styling and animations ├── script.js           # JavaScript game logic ├── README.md           # Project documentation └── .gitignore          # Git ignore file
+```
+tic-tac-toe/
+├── index.html          # Main HTML file
+├── styles.css          # CSS styling and animations
+├── script.js           # JavaScript game logic
+├── README.md           # Project documentation
+└── .gitignore          # Git ignore file
+```
 
 
 ## 🎨 Customization
@@ -123,7 +140,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Your Name - [melkotoury@gmail.com](mailto:melkotoury@gmail.com)
 
-Project Link: [https://github.com/melkotoury/tic-tac-toe](https://github.com/yourusername/tic-tac-toe)
+Project Link: [https://github.com/melkotoury/tic-tac-toe](https://github.com/melkotoury/tic-tac-toe)
 
 ---
 
