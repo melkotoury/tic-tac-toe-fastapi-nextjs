@@ -17,20 +17,11 @@ interface Game {
   score_o: number;
 }
 
-interface WinningLineStyle {
-  width: string;
-  height: string;
-  left: string;
-  top: string;
-  transform?: string;
-  transformOrigin?: string;
-}
-
 export default function Home() {
   const [game, setGame] = useState<Game | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [winningCells, setWinningCells] = useState<number[]>([]);
-  const [winningLineStyle, setWinningLineStyle] = useState<WinningLineStyle | null>(null);
+  const [winningCombo, setWinningCombo] = useState<number[] | null>(null);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -68,54 +59,6 @@ export default function Home() {
     }
   };
 
-  const drawWinningLine = useCallback((combo: number[]) => {
-    const lineThickness = 8;
-    const boardOffset = 2; // Corresponds to the border of the game board
-
-    const isRowWin = (c: number[]) => (c[0] === 0 && c[1] === 1 && c[2] === 2) || (c[0] === 3 && c[1] === 4 && c[2] === 5) || (c[0] === 6 && c[1] === 7 && c[2] === 8);
-    const isColumnWin = (c: number[]) => (c[0] === 0 && c[1] === 3 && c[2] === 6) || (c[0] === 1 && c[1] === 4 && c[2] === 7) || (c[0] === 2 && c[1] === 5 && c[2] === 8);
-    const isDiagonalWin = (c: number[]) => (c[0] === 0 && c[1] === 4 && c[2] === 8) || (c[0] === 2 && c[1] === 4 && c[2] === 6);
-
-    let style: WinningLineStyle = {
-      width: '',
-      height: '',
-      left: '',
-      top: '',
-    };
-
-    if (isRowWin(combo)) {
-      const rowPositions: { [key: number]: number } = { 0: 97, 3: 297, 6: 497 };
-      style = {
-        width: '596px',
-        height: `${lineThickness}px`,
-        left: `${boardOffset}px`,
-        top: `${rowPositions[combo[0]] + boardOffset}px`,
-      };
-    } else if (isColumnWin(combo)) {
-      const columnPositions: { [key: number]: number } = { 0: 97, 1: 297, 2: 497 };
-      style = {
-        width: `${lineThickness}px`,
-        height: '596px',
-        left: `${columnPositions[combo[0]] + boardOffset}px`,
-        top: `${boardOffset}px`,
-      };
-    } else if (isDiagonalWin(combo)) {
-      style = {
-        width: `${lineThickness}px`,
-        height: '842px',
-        left: '298px',
-        top: '-121px',
-        transformOrigin: 'center',
-      };
-      if (combo[0] === 0 && combo[1] === 4 && combo[2] === 8) {
-        style.transform = 'rotate(45deg)';
-      } else if (combo[0] === 2 && combo[1] === 4 && combo[2] === 6) {
-        style.transform = 'rotate(-45deg)';
-      }
-    }
-    setWinningLineStyle(style);
-  }, []);
-
   const createNewGame = useCallback(async (initialGame?: Partial<Game>) => {
     try {
       const defaultGame = {
@@ -134,7 +77,7 @@ export default function Home() {
       setGame(response.data);
       setError(null);
       setWinningCells([]);
-      setWinningLineStyle(null);
+      setWinningCombo(null);
     } catch (err) {
       setError('Failed to create a new game.');
       console.error(err);
@@ -149,16 +92,16 @@ export default function Home() {
 
   useEffect(() => {
     if (game && game.winner && game.winner !== "tie") {
-      const winningCombo = winningCombinations.find(combo =>
-        combo.every(index => game.board[index] === game.winner)
+      const combo = winningCombinations.find(c =>
+        c.every(index => game.board[index] === game.winner)
       );
-      if (winningCombo) {
-        setWinningCells(winningCombo);
-        drawWinningLine(winningCombo);
+      if (combo) {
+        setWinningCells(combo);
+        setWinningCombo(combo);
         createConfetti();
       }
     }
-  }, [game, winningCombinations, drawWinningLine]);
+  }, [game, winningCombinations]);
 
   useEffect(() => {
     if (game && game.current_player === game.ai_player && game.game_active) {
@@ -301,10 +244,7 @@ export default function Home() {
 
       {error && <p className="text-red-500 mb-4">Error: {error}</p>}
       {game && (
-        <div className="relative">
-          <GameBoard board={game.board} onCellClick={handleCellClick} winningCells={winningCells} />
-          {winningLineStyle && <div className="winning-line" style={winningLineStyle}></div>}
-        </div>
+        <GameBoard board={game.board} onCellClick={handleCellClick} winningCells={winningCells} winningCombo={winningCombo} />
       )}
     </div>
   );
