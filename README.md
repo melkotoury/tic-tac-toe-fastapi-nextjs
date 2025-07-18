@@ -18,7 +18,7 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 
 ### Prerequisites
 
-- Docker and Docker Compose
+- Docker Desktop (ensure it's running)
 - PostgreSQL installed and running on your local machine.
 
 ### Installation
@@ -63,7 +63,7 @@ Since you want to use your local PostgreSQL instance with the `melkotoury` user,
     ```
     Replace `'your_melkotoury_password'` with your actual password.
 
-3.  **Create a `.env.docker` file** in the root of the project and add your database credentials. This file will be used by Docker Compose to set environment variables for the services.
+3.  **Create a `.env` file** in the root of the project and add your database credentials. This file will be used by Docker Compose to set environment variables for the services.
 
     ```
     DB_USER=melkotoury
@@ -75,7 +75,9 @@ Since you want to use your local PostgreSQL instance with the `melkotoury` user,
 
 ### Running the Application
 
-1.  **Build and run the Docker containers:**
+1.  **Ensure Docker Desktop is running.**
+
+2.  **Build and run the Docker containers:**
 
     ```bash
     docker compose up --build
@@ -86,7 +88,7 @@ Since you want to use your local PostgreSQL instance with the `melkotoury` user,
     - Start the FastAPI backend container, connecting to your local PostgreSQL.
     - Start the Next.js frontend container.
 
-2.  **Open your browser** and navigate to `http://localhost:3000`.
+3.  **Open your browser** and navigate to `http://localhost:3000`.
 
 ## Project Structure
 
@@ -109,7 +111,7 @@ Since you want to use your local PostgreSQL instance with the `melkotoury` user,
 │   │       └── GameBoard.tsx
 │   ├── package.json
 │   └── ...
-├── .env.docker (ignored)
+├── .env (ignored)
 ├── .gitignore
 ├── docker-compose.yml
 └── README.md
