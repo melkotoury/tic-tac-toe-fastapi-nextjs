@@ -4,7 +4,7 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 
 - **Frontend:** Next.js, React, TypeScript, Tailwind CSS
 - **Backend:** Python, FastAPI
-- **Database:** PostgreSQL
+- **Database:** PostgreSQL (Dockerized)
 
 ## Features
 
@@ -19,7 +19,6 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 ### Prerequisites
 
 - Docker Desktop (ensure it's running)
-- PostgreSQL installed and running on your local machine.
 
 ### Installation
 
@@ -30,35 +29,6 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
    cd tic-tac-toe-fast-nextjs
    ```
 
-### Database Setup (Local PostgreSQL)
-
-Since you want to use your local PostgreSQL instance, follow these steps:
-
-1.  **Ensure your PostgreSQL server is running.**
-
-2.  **Create the database and grant privileges.** Open your terminal and connect to your PostgreSQL server. You might need to use `psql -U postgres` or `sudo -u postgres psql` depending on your setup.
-
-    ```bash
-    # Connect to PostgreSQL (replace 'postgres' with your admin user if different)
-    psql -U postgres
-    ```
-
-    Once in the `psql` prompt, execute the following commands:
-
-    ```sql
-    -- Create the database if it doesn't exist
-    CREATE DATABASE tictactoe_db;
-
-    -- Create a user and grant all privileges on the database to this user
-    CREATE USER your_db_username WITH PASSWORD 'your_db_password';
-    GRANT ALL PRIVILEGES ON DATABASE tictactoe_db TO your_db_username;
-
-    -- Exit psql
-    \q
-    ```
-
-    **Note:** Replace `your_db_username` and `your_db_password` with your actual PostgreSQL username and a strong password.
-
 ### Environment Variables
 
 Environment variables are crucial for configuring the application. They are kept out of version control for security.
@@ -68,13 +38,13 @@ Environment variables are crucial for configuring the application. They are kept
         ```bash
         cp backend/.env.example backend/.env
         ```
-    *   Open `backend/.env` and update the database credentials:
+    *   Open `backend/.env` and update the database credentials for the **Dockerized PostgreSQL**:
         ```
-        DB_USER=your_db_username
-        DB_PASSWORD=your_db_password
+        DB_USER=postgres_user
+        DB_PASSWORD=postgres_password
         DB_NAME=tictactoe_db
         ```
-        **IMPORTANT:** Replace `your_db_username` and `your_db_password` with the actual username and password for your PostgreSQL user.
+        **IMPORTANT:** You can choose any username and password here. These will be used by the PostgreSQL container that Docker Compose spins up. `tictactoe_db` is the default database name.
 
 2.  **Frontend Environment Variables:**
     *   Copy the example file to create your local `.env.local` file:
@@ -98,7 +68,8 @@ Environment variables are crucial for configuring the application. They are kept
 
     This command will:
     - Build the Docker images for the backend and frontend.
-    - Start the FastAPI backend container, connecting to your local PostgreSQL.
+    - Start the PostgreSQL database container.
+    - Start the FastAPI backend container, connecting to the Dockerized PostgreSQL.
     - Start the Next.js frontend container.
 
 3.  **Open your browser** and navigate to `http://localhost:3000`.
