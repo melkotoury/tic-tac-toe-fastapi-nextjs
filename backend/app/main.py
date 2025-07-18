@@ -106,9 +106,6 @@ def update_game(game_id: int, game: Game):
 
 @app.post("/ai-move", response_model=Game)
 def ai_move_endpoint(game: Game):
-    if not game.game_active:
-        return game
-
     game_instance = TicTacToeGame(
         board=list(game.board),
         human_player=game.human_player,
@@ -119,21 +116,35 @@ def ai_move_endpoint(game: Game):
         winner=game.winner
     )
 
-    best_move = game_instance.get_ai_move()
-    game_instance.make_move(best_move, game_instance.ai_player)
-
-    if game_instance.check_win(game_instance.ai_player):
-        game_instance.game_active = False
-        game_instance.winner = game_instance.ai_player
-        if game_instance.ai_player == 'X':
+    # Check if human player won or it's a tie after their move
+    if game_instance.check_win(game_instance.human_player):
+        game.game_active = False
+        game.winner = game_instance.human_player
+        if game_instance.human_player == 'X':
             game.score_x += 1
         else:
             game.score_o += 1
     elif game_instance.is_board_full():
-        game_instance.game_active = False
-        game_instance.winner = "tie"
-    else:
-        game_instance.current_player = game_instance.human_player
+        game.game_active = False
+        game.winner = "tie"
+
+    # Only allow AI to move if the game is still active
+    if game.game_active:
+        best_move = game_instance.get_ai_move()
+        game_instance.make_move(best_move, game_instance.ai_player)
+
+        if game_instance.check_win(game_instance.ai_player):
+            game.game_active = False
+            game.winner = game_instance.ai_player
+            if game_instance.ai_player == 'X':
+                game.score_x += 1
+            else:
+                game.score_o += 1
+        elif game_instance.is_board_full():
+            game.game_active = False
+            game.winner = "tie"
+        else:
+            game_instance.current_player = game_instance.human_player
 
     game.board = game_instance.board
     game.game_active = game_instance.game_active
