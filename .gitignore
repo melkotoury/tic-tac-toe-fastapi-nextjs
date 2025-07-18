@@ -87,3 +87,4 @@ docs/_build/
 # Ignore any local configuration files
 config.local.js
 settings.local.json
+backend/.env
