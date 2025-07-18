@@ -27,7 +27,7 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 
    ```bash
    git clone https://github.com/melkotoury/tic-tac-toe-fastapi-nextjs.git
-   cd tic-tac-toe-fastapi-nextjs
+   cd tic-tac-toe-fast-nextjs
    ```
 
 ### Database Setup (Local PostgreSQL)
@@ -67,11 +67,18 @@ Since you want to use your local PostgreSQL instance with the `melkotoury` user,
 
     ```
     DB_USER=melkotoury
-    DB_PASSWORD=your_melkotoury_password # REPLACE WITH YOUR ACTUAL PASSWORD
+    DB_PASSWORD=Rc0737 # This password is set in the .env file for convenience.
     DB_NAME=tictactoe_db
     ```
 
-    **IMPORTANT:** Replace `your_melkotoury_password` with the actual password for your `melkotoury` PostgreSQL user.
+    **IMPORTANT:** Ensure the password for your `melkotoury` PostgreSQL user matches the `DB_PASSWORD` in this `.env` file.
+
+### Environment Variables (`.env` vs `.env.example`)
+
+This project uses a single `.env` file at the root for managing environment variables when running with Docker Compose. This file is automatically picked up by `docker compose` and its variables are passed to the respective services (backend and frontend).
+
+*   The **`.env` file at the project root** contains the actual credentials and configuration used by Docker Compose.
+*   The **`.env.example` files** (e.g., `frontend/.env.example`) are provided as **templates** for developers who might want to run individual services (like the frontend or backend) *independently* of the full Docker Compose setup. If you were to run `npm run dev` directly in the `frontend` directory, you would typically create a `.env.local` file from `frontend/.env.example` to configure the frontend's API URL.
 
 ### Running the Application
 
@@ -111,7 +118,7 @@ Since you want to use your local PostgreSQL instance with the `melkotoury` user,
 │   │       └── GameBoard.tsx
 │   ├── package.json
 │   └── ...
-├── .env (ignored)
+├── .env
 ├── .gitignore
 ├── docker-compose.yml
 └── README.md
