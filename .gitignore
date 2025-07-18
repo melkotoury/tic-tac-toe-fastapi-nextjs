@@ -88,3 +88,4 @@ docs/_build/
 config.local.js
 settings.local.json
 backend/.env
+frontend/.env.local

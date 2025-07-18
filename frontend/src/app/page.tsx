@@ -20,7 +20,7 @@ export default function Home() {
 
   useEffect(() => {
     const createNewGame = async () => {
-      const response = await axios.post('http://localhost:8000/games', {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/games`, {
         board: Array(9).fill(''),
         human_player: 'X',
         ai_player: 'O',
@@ -37,7 +37,7 @@ export default function Home() {
   useEffect(() => {
     if (game && game.current_player === game.ai_player && game.game_active) {
       const aiMove = async () => {
-        const response = await axios.post('http://localhost:8000/ai-move', game);
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/ai-move`, game);
         setGame(response.data);
       };
       aiMove();
@@ -55,13 +55,13 @@ export default function Home() {
     const updatedGame = { ...game, board: newBoard, current_player: game.ai_player };
     setGame(updatedGame);
 
-    const response = await axios.put(`http://localhost:8000/games/${game.id}`, updatedGame);
+    const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/games/${game.id}`, updatedGame);
     setGame(response.data);
   };
 
   const resetGame = async () => {
     if (!game) return;
-    const response = await axios.post('http://localhost:8000/games', {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/games`, {
       board: Array(9).fill(''),
       human_player: game.human_player,
       ai_player: game.ai_player,

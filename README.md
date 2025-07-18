@@ -45,13 +45,18 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
    pip install -r requirements.txt
    ```
 
-### Database Setup
+### Environment Variables
 
-1. **Create a PostgreSQL database.**
-2. **Create a `.env` file in the `backend` directory** and add your database connection string:
+1. **Backend:** Create a `.env` file in the `backend` directory by copying `backend/.env.example` and update the `DATABASE_URL` with your PostgreSQL connection string.
 
+   ```bash
+   cp backend/.env.example backend/.env
    ```
-   DATABASE_URL=postgresql://user:password@host:port/database
+
+2. **Frontend:** Create a `.env.local` file in the `frontend` directory by copying `frontend/.env.example`. The `NEXT_PUBLIC_API_URL` should point to your backend server (default: `http://localhost:8000`).
+
+   ```bash
+   cp frontend/.env.example frontend/.env.local
    ```
 
 ### Running the Application
@@ -78,9 +83,12 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 .
 ├── backend
 │   ├── .env (ignored)
+│   ├── .env.example
 │   ├── main.py
 │   └── requirements.txt
 ├── frontend
+│   ├── .env.local (ignored)
+│   ├── .env.example
 │   ├── src
 │   │   └── app
 │   │       ├── page.tsx
