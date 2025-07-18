@@ -26,13 +26,13 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/melkotoury/tic-tac-toe-fastapi-nextjs.git
+   git clone https://github.com/melkotoury/tic-tac-toe-fast-nextjs.git
    cd tic-tac-toe-fast-nextjs
    ```
 
 ### Database Setup (Local PostgreSQL)
 
-Since you want to use your local PostgreSQL instance with the `melkotoury` user, follow these steps:
+Since you want to use your local PostgreSQL instance, follow these steps:
 
 1.  **Ensure your PostgreSQL server is running.**
 
@@ -49,29 +49,25 @@ Since you want to use your local PostgreSQL instance with the `melkotoury` user,
     -- Create the database if it doesn't exist
     CREATE DATABASE tictactoe_db;
 
-    -- Grant all privileges on the database to your 'melkotoury' user
-    GRANT ALL PRIVILEGES ON DATABASE tictactoe_db TO melkotoury;
+    -- Create a user and grant all privileges on the database to this user
+    CREATE USER your_db_username WITH PASSWORD 'your_db_password';
+    GRANT ALL PRIVILEGES ON DATABASE tictactoe_db TO your_db_username;
 
     -- Exit psql
     \q
     ```
 
-    **Note:** If your `melkotoury` user does not have a password set for PostgreSQL, or if you're unsure, you might need to set one:
-
-    ```sql
-    ALTER USER melkotoury WITH PASSWORD 'your_melkotoury_password';
-    ```
-    Replace `'your_melkotoury_password'` with your actual password.
+    **Note:** Replace `your_db_username` and `your_db_password` with your actual PostgreSQL username and a strong password.
 
 3.  **Create a `.env` file** in the root of the project and add your database credentials. This file will be used by Docker Compose to set environment variables for the services.
 
     ```
-    DB_USER=melkotoury
-    DB_PASSWORD=Rc0737 # This password is set in the .env file for convenience.
+    DB_USER=your_db_username
+    DB_PASSWORD=your_db_password
     DB_NAME=tictactoe_db
     ```
 
-    **IMPORTANT:** Ensure the password for your `melkotoury` PostgreSQL user matches the `DB_PASSWORD` in this `.env` file.
+    **IMPORTANT:** Replace `your_db_username` and `your_db_password` with the actual username and password for your PostgreSQL user.
 
 ### Environment Variables (`.env` vs `.env.example`)
 
