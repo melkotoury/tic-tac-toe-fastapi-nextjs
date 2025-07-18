@@ -18,9 +18,7 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 
 ### Prerequisites
 
-- Node.js and npm
-- Python and pip
-- PostgreSQL
+- Docker and Docker Compose
 
 ### Installation
 
@@ -31,70 +29,50 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
    cd tic-tac-toe-fastapi-nextjs
    ```
 
-2. **Install frontend dependencies:**
+2. **Create a `.env.docker` file** in the root of the project and add your database credentials. This file will be used by Docker Compose to set environment variables for the services.
 
-   ```bash
-   cd frontend
-   npm install
+   ```
+   DB_USER=your_db_user
+   DB_PASSWORD=your_db_password
+   DB_NAME=tictactoe_db
    ```
 
-3. **Install backend dependencies:**
-
-   ```bash
-   cd ../backend
-   pip install -r requirements.txt
-   ```
-
-### Environment Variables
-
-1. **Backend:** Create a `.env` file in the `backend` directory by copying `backend/.env.example` and update the `DATABASE_URL` with your PostgreSQL connection string.
-
-   ```bash
-   cp backend/.env.example backend/.env
-   ```
-
-2. **Frontend:** Create a `.env.local` file in the `frontend` directory by copying `frontend/.env.example`. The `NEXT_PUBLIC_API_URL` should point to your backend server (default: `http://localhost:8000`).
-
-   ```bash
-   cp frontend/.env.example frontend/.env.local
-   ```
+   **Note:** Replace `your_db_user` and `your_db_password` with strong, secure credentials. The `DB_NAME` can be anything you prefer.
 
 ### Running the Application
 
-1. **Start the backend server:**
+1. **Build and run the Docker containers:**
 
    ```bash
-   cd backend
-   uvicorn main:app --reload
+   docker compose up --build
    ```
 
-2. **Start the frontend development server:**
+   This command will:
+   - Build the Docker images for the backend and frontend.
+   - Start the PostgreSQL database container.
+   - Start the FastAPI backend container.
+   - Start the Next.js frontend container.
 
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-
-3. **Open your browser** and navigate to `http://localhost:3000`.
+2. **Open your browser** and navigate to `http://localhost:3000`.
 
 ## Project Structure
 
 ```
 .
 ├── backend
-│   ├── .env (ignored)
-│   ├── .env.example
+│   ├── Dockerfile
 │   ├── main.py
 │   └── requirements.txt
 ├── frontend
-│   ├── .env.local (ignored)
-│   ├── .env.example
+│   ├── Dockerfile
 │   ├── src
 │   │   └── app
 │   │       ├── page.tsx
 │   │       └── layout.tsx
 │   ├── package.json
 │   └── ...
+├── .env.docker (ignored)
 ├── .gitignore
+├── docker-compose.yml
 └── README.md
 ```
