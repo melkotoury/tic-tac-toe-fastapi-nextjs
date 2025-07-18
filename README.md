@@ -26,6 +26,8 @@ This application leverages the power of:
     -   [Pydantic](https://docs.pydantic.dev/latest/) (Data Validation)
     -   [psycopg2](https://www.psycopg.org/) (PostgreSQL Adapter)
     -   [Ruff](https://docs.astral.sh/ruff/) (Python Linter & Formatter)
+    -   [Pytest](https://docs.pytest.org/en/stable/) (Testing Framework)
+    -   [Httpx](https://www.python-httpx.org/) (HTTP Client for testing)
 -   **Database:**
     -   [PostgreSQL](https://www.postgresql.org/) (Powerful Open-Source Relational Database)
 -   **Containerization:**
@@ -52,7 +54,7 @@ Before you begin, ensure you have the following installed:
 
 ### Environment Variables
 
-Environment variables are crucial for configuring the application and are kept out of version control for security.
+Environment variables are crucial for configuring the application. They are kept out of version control for security.
 
 1.  **Create a `.env` file** in the **root** of the project by copying the example file:
 
@@ -63,8 +65,8 @@ Environment variables are crucial for configuring the application and are kept o
 2.  Open the newly created `.env` file and update the variables. These credentials will be used by the Dockerized PostgreSQL container. You can choose any strong username and password here.
 
     ```
-    DB_USER=your_postgres_user
-    DB_PASSWORD=your_postgres_password
+    DB_USER=postgres_user
+    DB_PASSWORD=postgres_password
     DB_NAME=tictactoe_db
 
     NEXT_PUBLIC_API_URL=http://localhost:8000
@@ -98,6 +100,20 @@ Environment variables are crucial for configuring the application and are kept o
     http://localhost:3000
     ```
 
+### Running Tests
+
+#### Backend Tests
+
+To run the backend tests, first ensure your Docker containers are running (`docker compose up`). Then, execute the tests within the backend service:
+
+```bash
+docker compose exec backend pytest
+```
+
+#### Frontend Tests
+
+(Coming Soon: Frontend tests will be added in a future update.)
+
 ### Connecting to the Database (Optional)
 
 If you wish to inspect the database directly using a tool like SQLPro Studio, DBeaver, or pgAdmin, use the following connection details:
@@ -118,6 +134,9 @@ If you wish to inspect the database directly using a tool like SQLPro Studio, DB
 │   │   ├── database.py
 │   │   ├── game_logic.py
 │   │   └── main.py
+│   ├── tests/
+│   │   ├── test_game_logic.py
+│   │   └── test_main.py
 │   └── requirements.txt
 ├── frontend/
 │   ├── Dockerfile
@@ -131,7 +150,7 @@ If you wish to inspect the database directly using a tool like SQLPro Studio, DB
 │   ├── package.json
 │   ├── tsconfig.json
 │   └── ...
-├── .env (ignored)
+├── .env
 ├── .env.example
 ├── .gitignore
 ├── docker-compose.yml
