@@ -180,19 +180,19 @@ export default function Home() {
   };
 
   return (
-    <div className="game-container w-full max-w-3xl mx-auto text-center relative">
-      <div className="header mb-10 p-5 bg-white rounded-lg shadow-md">
-        <div className="player-selection mb-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-800">Choose Your Symbol</h3>
-          <div className="player-buttons flex justify-center gap-4 mb-4">
+    <div className="game-container">
+      <div className="header">
+        <div className="player-selection">
+          <h3>Choose Your Symbol</h3>
+          <div className="player-buttons">
             <button
-              className={`player-btn px-5 py-3 border-2 border-gray-800 bg-white cursor-pointer text-lg font-bold rounded-md transition-all duration-300 min-w-[60px] ${game?.human_player === 'X' ? 'active bg-gray-800 text-white' : ''}`}
+              className={`player-btn ${game?.human_player === 'X' ? 'active' : ''}`}
               onClick={() => choosePlayer('X')}
             >
               X
             </button>
             <button
-              className={`player-btn px-5 py-3 border-2 border-gray-800 bg-white cursor-pointer text-lg font-bold rounded-md transition-all duration-300 min-w-[60px] ${game?.human_player === 'O' ? 'active bg-gray-800 text-white' : ''}`}
+              className={`player-btn ${game?.human_player === 'O' ? 'active' : ''}`}
               onClick={() => choosePlayer('O')}
             >
               O
@@ -200,23 +200,23 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="difficulty-selection mb-6">
-          <h3 className="text-xl font-bold mb-4 text-gray-800">Choose Difficulty</h3>
-          <div className="difficulty-buttons flex justify-center gap-3 mb-4">
+        <div className="difficulty-selection">
+          <h3>Choose Difficulty</h3>
+          <div className="difficulty-buttons">
             <button
-              className={`difficulty-btn px-4 py-2 border-2 border-gray-800 bg-white cursor-pointer text-base font-bold rounded-md transition-all duration-300 min-w-[80px] ${game?.difficulty === 'easy' ? 'active bg-gray-800 text-white' : ''}`}
+              className={`difficulty-btn ${game?.difficulty === 'easy' ? 'active' : ''}`}
               onClick={() => changeDifficulty('easy')}
             >
               Easy
             </button>
             <button
-              className={`difficulty-btn px-4 py-2 border-2 border-gray-800 bg-white cursor-pointer text-base font-bold rounded-md transition-all duration-300 min-w-[80px] ${game?.difficulty === 'normal' ? 'active bg-gray-800 text-white' : ''}`}
+              className={`difficulty-btn ${game?.difficulty === 'normal' ? 'active' : ''}`}
               onClick={() => changeDifficulty('normal')}
             >
               Normal
             </button>
             <button
-              className={`difficulty-btn px-4 py-2 border-2 border-gray-800 bg-white cursor-pointer text-base font-bold rounded-md transition-all duration-300 min-w-[80px] ${game?.difficulty === 'hard' ? 'active bg-gray-800 text-white' : ''}`}
+              className={`difficulty-btn ${game?.difficulty === 'hard' ? 'active' : ''}`}
               onClick={() => changeDifficulty('hard')}
             >
               Hard
@@ -224,19 +224,19 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="game-info mb-5">
-          <div className="turn-indicator text-2xl font-bold mb-5 text-gray-800">{getTurnIndicator()}</div>
-          <div className="score-board flex justify-center gap-10 mb-5">
-            <div className="score-item text-center p-4 border-2 border-gray-800 rounded-md bg-white min-w-[90px]">
-              <div className="score-label text-lg font-bold mb-2 text-gray-800">X</div>
-              <div className="score-value text-3xl font-bold text-gray-800">{game?.score_x}</div>
+        <div className="game-info">
+          <div className="turn-indicator">{getTurnIndicator()}</div>
+          <div className="score-board">
+            <div className="score-item">
+              <div className="score-label">X</div>
+              <div className="score-value">{game?.score_x}</div>
             </div>
-            <div className="score-item text-center p-4 border-2 border-gray-800 rounded-md bg-white min-w-[90px]">
-              <div className="score-label text-lg font-bold mb-2 text-gray-800">O</div>
-              <div className="score-value text-3xl font-bold text-gray-800">{game?.score_o}</div>
+            <div className="score-item">
+              <div className="score-label">O</div>
+              <div className="score-value">{game?.score_o}</div>
             </div>
           </div>
-          <button className="reset-btn px-5 py-3 border-2 border-gray-800 bg-gray-800 text-white cursor-pointer text-base font-bold rounded-md transition-all duration-300 hover:bg-gray-600" onClick={resetGame}>
+          <button className="reset-btn" onClick={resetGame}>
             Reset Game
           </button>
         </div>
