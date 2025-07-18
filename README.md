@@ -19,6 +19,7 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 ### Prerequisites
 
 - Docker and Docker Compose
+- PostgreSQL installed and running on your local machine.
 
 ### Installation
 
@@ -29,31 +30,63 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
    cd tic-tac-toe-fastapi-nextjs
    ```
 
-2. **Create a `.env.docker` file** in the root of the project and add your database credentials. This file will be used by Docker Compose to set environment variables for the services.
+### Database Setup (Local PostgreSQL)
 
-   ```
-   DB_USER=your_db_user
-   DB_PASSWORD=your_db_password
-   DB_NAME=tictactoe_db
-   ```
+Since you want to use your local PostgreSQL instance with the `melkotoury` user, follow these steps:
 
-   **Note:** Replace `your_db_user` and `your_db_password` with strong, secure credentials. The `DB_NAME` can be anything you prefer.
+1.  **Ensure your PostgreSQL server is running.**
+
+2.  **Create the database and grant privileges.** Open your terminal and connect to your PostgreSQL server. You might need to use `psql -U postgres` or `sudo -u postgres psql` depending on your setup.
+
+    ```bash
+    # Connect to PostgreSQL (replace 'postgres' with your admin user if different)
+    psql -U postgres
+    ```
+
+    Once in the `psql` prompt, execute the following commands:
+
+    ```sql
+    -- Create the database if it doesn't exist
+    CREATE DATABASE tictactoe_db;
+
+    -- Grant all privileges on the database to your 'melkotoury' user
+    GRANT ALL PRIVILEGES ON DATABASE tictactoe_db TO melkotoury;
+
+    -- Exit psql
+    \q
+    ```
+
+    **Note:** If your `melkotoury` user does not have a password set for PostgreSQL, or if you're unsure, you might need to set one:
+
+    ```sql
+    ALTER USER melkotoury WITH PASSWORD 'your_melkotoury_password';
+    ```
+    Replace `'your_melkotoury_password'` with your actual password.
+
+3.  **Create a `.env.docker` file** in the root of the project and add your database credentials. This file will be used by Docker Compose to set environment variables for the services.
+
+    ```
+    DB_USER=melkotoury
+    DB_PASSWORD=your_melkotoury_password # REPLACE WITH YOUR ACTUAL PASSWORD
+    DB_NAME=tictactoe_db
+    ```
+
+    **IMPORTANT:** Replace `your_melkotoury_password` with the actual password for your `melkotoury` PostgreSQL user.
 
 ### Running the Application
 
-1. **Build and run the Docker containers:**
+1.  **Build and run the Docker containers:**
 
-   ```bash
-   docker compose up --build
-   ```
+    ```bash
+    docker compose up --build
+    ```
 
-   This command will:
-   - Build the Docker images for the backend and frontend.
-   - Start the PostgreSQL database container.
-   - Start the FastAPI backend container.
-   - Start the Next.js frontend container.
+    This command will:
+    - Build the Docker images for the backend and frontend.
+    - Start the FastAPI backend container, connecting to your local PostgreSQL.
+    - Start the Next.js frontend container.
 
-2. **Open your browser** and navigate to `http://localhost:3000`.
+2.  **Open your browser** and navigate to `http://localhost:3000`.
 
 ## Project Structure
 
@@ -61,7 +94,10 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 .
 ├── backend
 │   ├── Dockerfile
-│   ├── main.py
+│   ├── app
+│   │   ├── database.py
+│   │   ├── game_logic.py
+│   │   └── main.py
 │   └── requirements.txt
 ├── frontend
 │   ├── Dockerfile
@@ -69,6 +105,8 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 │   │   └── app
 │   │       ├── page.tsx
 │   │       └── layout.tsx
+│   │   └── components
+│   │       └── GameBoard.tsx
 │   ├── package.json
 │   └── ...
 ├── .env.docker (ignored)
