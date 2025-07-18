@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import GameBoard from '@/components/GameBoard';
 
 interface Game {
   id: number | null;
@@ -17,19 +18,28 @@ interface Game {
 export default function Home() {
   const [game, setGame] = useState<Game | null>(null);
   const [scores, setScores] = useState({ X: 0, O: 0 });
+  const [error, setError] = useState<string | null>(null);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const createNewGame = async () => {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/games`, {
-        board: Array(9).fill(''),
-        human_player: 'X',
-        ai_player: 'O',
-        current_player: 'X',
-        difficulty: 'normal',
-        game_active: true,
-        winner: null,
-      });
-      setGame(response.data);
+      try {
+        const response = await axios.post(`${API_URL}/games`, {
+          board: Array(9).fill(''),
+          human_player: 'X',
+          ai_player: 'O',
+          current_player: 'X',
+          difficulty: 'normal',
+          game_active: true,
+          winner: null,
+        });
+        setGame(response.data);
+        setError(null);
+      } catch (err) {
+        setError('Failed to create a new game.');
+        console.error(err);
+      }
     };
     createNewGame();
   }, []);
@@ -37,12 +47,18 @@ export default function Home() {
   useEffect(() => {
     if (game && game.current_player === game.ai_player && game.game_active) {
       const aiMove = async () => {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/ai-move`, game);
-        setGame(response.data);
+        try {
+          const response = await axios.post(`${API_URL}/ai-move`, game);
+          setGame(response.data);
+          setError(null);
+        } catch (err) {
+          setError('AI failed to make a move.');
+          console.error(err);
+        }
       };
       aiMove();
     }
-  }, [game]);
+  }, [game, API_URL]);
 
   const handleCellClick = async (index: number) => {
     if (!game || game.board[index] !== '' || !game.game_active || game.current_player !== game.human_player) {
@@ -55,22 +71,34 @@ export default function Home() {
     const updatedGame = { ...game, board: newBoard, current_player: game.ai_player };
     setGame(updatedGame);
 
-    const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/games/${game.id}`, updatedGame);
-    setGame(response.data);
+    try {
+      const response = await axios.put(`${API_URL}/games/${game.id}`, updatedGame);
+      setGame(response.data);
+      setError(null);
+    } catch (err) {
+      setError('Failed to make your move.');
+      console.error(err);
+    }
   };
 
   const resetGame = async () => {
     if (!game) return;
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/games`, {
-      board: Array(9).fill(''),
-      human_player: game.human_player,
-      ai_player: game.ai_player,
-      current_player: 'X',
-      difficulty: game.difficulty,
-      game_active: true,
-      winner: null,
-    });
-    setGame(response.data);
+    try {
+      const response = await axios.post(`${API_URL}/games`, {
+        board: Array(9).fill(''),
+        human_player: game.human_player,
+        ai_player: game.ai_player,
+        current_player: 'X',
+        difficulty: game.difficulty,
+        game_active: true,
+        winner: null,
+      });
+      setGame(response.data);
+      setError(null);
+    } catch (err) {
+      setError('Failed to reset the game.');
+      console.error(err);
+    }
   };
 
   const choosePlayer = (player: string) => {
@@ -93,6 +121,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <h1 className="text-4xl font-bold mb-8">Tic Tac Toe</h1>
+      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
       <div className="flex gap-8">
         <div>
           <h2 className="text-2xl font-bold mb-4">Choose Your Symbol</h2>
@@ -135,17 +164,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4 mt-8">
-        {game?.board.map((cell, index) => (
-          <div
-            key={index}
-            className="w-24 h-24 bg-gray-200 flex items-center justify-center text-4xl font-bold cursor-pointer"
-            onClick={() => handleCellClick(index)}
-          >
-            {cell}
-          </div>
-        ))}
-      </div>
+      {game && <GameBoard board={game.board} onCellClick={handleCellClick} />}
       <div className="flex gap-8 mt-8">
         <div>
           <h2 className="text-2xl font-bold">Score</h2>
