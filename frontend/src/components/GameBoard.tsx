@@ -88,7 +88,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, onCellClick, winningCells,
           {cell}
         </button>
       ))}
-      {winningLineStyle && <div className="winning-line" style={winningLineStyle}></div>}
+      {winningLineStyle && <div className="winning-line" style={winningLineStyle} data-testid="winning-line"></div>}
     </div>
   );
 };

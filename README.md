@@ -20,6 +20,8 @@ This application leverages the power of:
     -   [React](https://react.dev/) (UI Library)
     -   [TypeScript](https://www.typescriptlang.org/) (Type-safe JavaScript)
     -   [Tailwind CSS](https://tailwindcss.com/) (Utility-first CSS Framework)
+    -   [Jest](https://jestjs.io/) (Testing Framework)
+    -   [@testing-library/react](https://testing-library.com/docs/react-testing-library/intro/) (React Testing Utilities)
 -   **Backend:**
     -   [Python](https://www.python.org/) (Programming Language)
     -   [FastAPI](https://fastapi.tiangolo.com/) (High-performance Web Framework)
@@ -112,17 +114,11 @@ docker compose exec backend pytest
 
 #### Frontend Tests
 
-(Coming Soon: Frontend tests will be added in a future update.)
+To run the frontend tests, first ensure your Docker containers are running (`docker compose up`). Then, execute the tests within the frontend service:
 
-### Connecting to the Database (Optional)
-
-If you wish to inspect the database directly using a tool like SQLPro Studio, DBeaver, or pgAdmin, use the following connection details:
-
--   **Host/Address:** `localhost`
--   **Port:** `5432`
--   **Database:** The `DB_NAME` you set in your `.env` file (default: `tictactoe_db`)
--   **Username:** The `DB_USER` you set in your `.env` file (default: `postgres_user`)
--   **Password:** The `DB_PASSWORD` you set in your `.env` file (default: `postgres_password`)
+```bash
+docker compose exec frontend npm test
+```
 
 ## 📂 Project Structure
 
@@ -146,7 +142,9 @@ If you wish to inspect the database directly using a tool like SQLPro Studio, DB
 │   │   │   ├── layout.tsx
 │   │   │   └── globals.css
 │   │   └── components/
-│   │       └── GameBoard.tsx
+│   │       ├── GameBoard.tsx
+│   │       └── __tests__/
+│   │           └── GameBoard.test.tsx
 │   ├── package.json
 │   ├── tsconfig.json
 │   └── ...
