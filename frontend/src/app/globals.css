@@ -2,17 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html,
-  body {
-    min-height: 100vh;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-    padding: 50px 20px 20px 20px; /* Added top padding to prevent cutoff */
-    overflow-x: hidden;
-  }
+/* Universal box-sizing */
+* {
+  box-sizing: border-box;
 }
 
+/* Body styles */
+body {
+  min-height: 100vh;
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  padding: 50px 20px 20px 20px; /* Added top padding to prevent cutoff */
+  overflow-x: hidden;
+}
+
+/* Keyframes for animations */
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.05); }
@@ -23,6 +27,18 @@
   100% { box-shadow: 0 0 20px rgba(255, 0, 0, 1); }
 }
 
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Specific classes for winning line and confetti */
 .winning-line {
   position: absolute;
   background-color: #FF0000;
@@ -36,20 +52,63 @@
   position: fixed;
   width: 8px;
   height: 8px;
-  background-color: #ff0000;
+  background-color: #ff0000; /* Placeholder, actual color set by JS */
   animation: confetti-fall 4s linear infinite;
   pointer-events: none;
   z-index: 1000;
   border-radius: 50%;
 }
 
-@keyframes confetti-fall {
-  0% {
-      transform: translateY(-100vh) rotate(0deg);
-      opacity: 1;
+/* Custom Tailwind utilities for precise cell positioning */
+/* These are for the 600x600px board */
+.cell-0 { top: 2px; left: 2px; }
+.cell-1 { top: 2px; left: 202px; }
+.cell-2 { top: 2px; left: 402px; }
+.cell-3 { top: 202px; left: 2px; }
+.cell-4 { top: 202px; left: 202px; }
+.cell-5 { top: 202px; left: 402px; }
+.cell-6 { top: 402px; left: 2px; }
+.cell-7 { top: 402px; left: 202px; }
+.cell-8 { top: 402px; left: 402px; }
+
+/* Responsive adjustments for 300x300px board */
+@media (max-width: 768px) {
+  body {
+    padding: 30px 10px 10px 10px;
   }
-  100% {
-      transform: translateY(100vh) rotate(720deg);
-      opacity: 0;
+
+  .game-container {
+    padding: 10px;
+  }
+
+  .parent {
+    width: 300px !important;
+    height: 300px !important;
+  }
+
+  .cell {
+    width: 96px !important;
+    height: 96px !important;
+    font-size: 36px !important;
+    line-height: 96px !important;
+  }
+
+  .cell-0 { top: 2px; left: 2px; }
+  .cell-1 { top: 2px; left: 102px; }
+  .cell-2 { top: 2px; left: 202px; }
+  .cell-3 { top: 102px; left: 2px; }
+  .cell-4 { top: 102px; left: 102px; }
+  .cell-5 { top: 102px; left: 202px; }
+  .cell-6 { top: 202px; left: 2px; }
+  .cell-7 { top: 202px; left: 102px; }
+  .cell-8 { top: 202px; left: 202px; }
+
+  .score-board {
+    gap: 20px;
+  }
+
+  .score-item {
+    padding: 10px 15px;
+    min-width: 70px;
   }
 }
