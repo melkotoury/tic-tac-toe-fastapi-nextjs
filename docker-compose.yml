@@ -2,8 +2,6 @@ services:
   db:
     image: postgres:16-alpine
     restart: always
-    env_file:
-      - ./.env
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -16,11 +14,12 @@ services:
     restart: always
     ports:
       - "8000:8000"
-    env_file:
-      - ./.env
     environment:
       DB_HOST: db # Connect to the 'db' service within Docker network
       DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
     depends_on:
       - db
 
@@ -29,8 +28,6 @@ services:
     restart: always
     ports:
       - "3000:3000"
-    env_file:
-      - ./.env
     environment:
       NEXT_PUBLIC_API_URL: http://backend:8000
     depends_on:
