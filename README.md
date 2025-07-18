@@ -33,28 +33,25 @@ This is a full-stack Tic-Tac-Toe application built with the following technologi
 
 Environment variables are crucial for configuring the application. They are kept out of version control for security.
 
-1.  **Backend Environment Variables:**
-    *   Copy the example file to create your local `.env` file:
-        ```bash
-        cp backend/.env.example backend/.env
-        ```
-    *   Open `backend/.env` and update the database credentials for the **Dockerized PostgreSQL**:
-        ```
-        DB_USER=postgres_user
-        DB_PASSWORD=postgres_password
-        DB_NAME=tictactoe_db
-        ```
-        **IMPORTANT:** You can choose any username and password here. These will be used by the PostgreSQL container that Docker Compose spins up. `tictactoe_db` is the default database name.
+1.  **Create a `.env` file** in the **root** of the project by copying the example file:
 
-2.  **Frontend Environment Variables:**
-    *   Copy the example file to create your local `.env.local` file:
-        ```bash
-        cp frontend/.env.example frontend/.env.local
-        ```
-    *   Open `frontend/.env.local` and ensure `NEXT_PUBLIC_API_URL` points to your backend service (usually `http://localhost:8000` when running locally via Docker Compose):
-        ```
-        NEXT_PUBLIC_API_URL=http://localhost:8000
-        ```
+    ```bash
+    cp .env.example .env
+    ```
+
+2.  Open the newly created `.env` file and update the variables:
+
+    ```
+    DB_USER=postgres_user
+    DB_PASSWORD=postgres_password
+    DB_NAME=tictactoe_db
+
+    NEXT_PUBLIC_API_URL=http://localhost:8000
+    ```
+
+    **IMPORTANT:**
+    *   `DB_USER`, `DB_PASSWORD`, `DB_NAME`: These credentials will be used by the PostgreSQL container that Docker Compose spins up. You can choose any strong username and password here.
+    *   `NEXT_PUBLIC_API_URL`: This should point to your backend service. `http://localhost:8000` is correct for local development via Docker Compose.
 
 ### Running the Application
 
@@ -85,7 +82,6 @@ Environment variables are crucial for configuring the application. They are kept
 │   │   ├── game_logic.py
 │   │   └── main.py
 │   ├── .env (ignored)
-│   ├── .env.example
 │   └── requirements.txt
 ├── frontend
 │   ├── Dockerfile
@@ -96,9 +92,9 @@ Environment variables are crucial for configuring the application. They are kept
 │   │   └── components
 │   │       └── GameBoard.tsx
 │   ├── .env.local (ignored)
-│   ├── .env.example
 │   ├── package.json
 │   └── ...
+├── .env.example
 ├── .gitignore
 ├── docker-compose.yml
 └── README.md
