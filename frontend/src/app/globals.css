@@ -1,3 +1,55 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    padding: 50px 20px 20px 20px; /* Added top padding to prevent cutoff */
+    overflow-x: hidden;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes lineGlow {
+  0% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.7); }
+  100% { box-shadow: 0 0 20px rgba(255, 0, 0, 1); }
+}
+
+.winning-line {
+  position: absolute;
+  background-color: #FF0000;
+  z-index: 15;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+  animation: lineGlow 1s ease-in-out infinite alternate;
+}
+
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background-color: #ff0000;
+  animation: confetti-fall 4s linear infinite;
+  pointer-events: none;
+  z-index: 1000;
+  border-radius: 50%;
+}
+
+@keyframes confetti-fall {
+  0% {
+      transform: translateY(-100vh) rotate(0deg);
+      opacity: 1;
+  }
+  100% {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 0;
+  }
+}

@@ -30,6 +30,34 @@ export default function Home() {
     [0, 4, 8], [2, 4, 6] // diagonals
   ];
 
+  const createConfetti = () => {
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8', '#f7dc6f'];
+    const confettiCount = 80;
+
+    for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            confetti.style.animationDuration = (3 + Math.random() * 2) + 's';
+
+            const size = 6 + Math.random() * 4;
+            confetti.style.width = size + 'px';
+            confetti.style.height = size + 'px';
+
+            document.body.appendChild(confetti);
+
+            setTimeout(() => {
+                if (confetti.parentNode) {
+                    confetti.remove();
+                }
+            }, 6000);
+        }, i * 60);
+    }
+  };
+
   const createNewGame = useCallback(async (initialGame?: Partial<Game>) => {
     try {
       const defaultGame = {
@@ -67,6 +95,7 @@ export default function Home() {
       );
       if (winningCombo) {
         setWinningCells(winningCombo);
+        createConfetti();
       }
     }
   }, [game, winningCombinations]);
@@ -148,71 +177,70 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold mb-8">Tic Tac Toe</h1>
-      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
-      <div className="flex gap-8">
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Choose Your Symbol</h2>
-          <div className="flex gap-4">
+    <div className="game-container w-full max-w-3xl mx-auto text-center relative">
+      <div className="header mb-10 p-5 bg-white rounded-lg shadow-md">
+        <div className="player-selection mb-6">
+          <h3 className="text-xl font-bold mb-4 text-gray-800">Choose Your Symbol</h3>
+          <div className="player-buttons flex justify-center gap-4 mb-4">
             <button
-              className={`px-4 py-2 rounded-md ${game?.human_player === 'X' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`player-btn px-5 py-3 border-2 border-gray-800 bg-white cursor-pointer text-lg font-bold rounded-md transition-all duration-300 min-w-[60px] ${game?.human_player === 'X' ? 'active bg-gray-800 text-white' : ''}`}
               onClick={() => choosePlayer('X')}
             >
               X
             </button>
             <button
-              className={`px-4 py-2 rounded-md ${game?.human_player === 'O' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`player-btn px-5 py-3 border-2 border-gray-800 bg-white cursor-pointer text-lg font-bold rounded-md transition-all duration-300 min-w-[60px] ${game?.human_player === 'O' ? 'active bg-gray-800 text-white' : ''}`}
               onClick={() => choosePlayer('O')}
             >
               O
             </button>
           </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Choose Difficulty</h2>
-          <div className="flex gap-4">
+
+        <div className="difficulty-selection mb-6">
+          <h3 className="text-xl font-bold mb-4 text-gray-800">Choose Difficulty</h3>
+          <div className="difficulty-buttons flex justify-center gap-3 mb-4">
             <button
-              className={`px-4 py-2 rounded-md ${game?.difficulty === 'easy' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`difficulty-btn px-4 py-2 border-2 border-gray-800 bg-white cursor-pointer text-base font-bold rounded-md transition-all duration-300 min-w-[80px] ${game?.difficulty === 'easy' ? 'active bg-gray-800 text-white' : ''}`}
               onClick={() => changeDifficulty('easy')}
             >
               Easy
             </button>
             <button
-              className={`px-4 py-2 rounded-md ${game?.difficulty === 'normal' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`difficulty-btn px-4 py-2 border-2 border-gray-800 bg-white cursor-pointer text-base font-bold rounded-md transition-all duration-300 min-w-[80px] ${game?.difficulty === 'normal' ? 'active bg-gray-800 text-white' : ''}`}
               onClick={() => changeDifficulty('normal')}
             >
               Normal
             </button>
             <button
-              className={`px-4 py-2 rounded-md ${game?.difficulty === 'hard' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`difficulty-btn px-4 py-2 border-2 border-gray-800 bg-white cursor-pointer text-base font-bold rounded-md transition-all duration-300 min-w-[80px] ${game?.difficulty === 'hard' ? 'active bg-gray-800 text-white' : ''}`}
               onClick={() => changeDifficulty('hard')}
             >
               Hard
             </button>
           </div>
         </div>
-      </div>
-      <div className="my-4 text-2xl font-bold">{getTurnIndicator()}</div>
-      {game && <GameBoard board={game.board} onCellClick={handleCellClick} winningCells={winningCells} />}
-      <div className="flex gap-8 mt-8">
-        <div>
-          <h2 className="text-2xl font-bold">Score</h2>
-          <div className="flex gap-4 mt-4">
-            <div>
-              <p className="text-xl font-bold">X</p>
-              <p className="text-xl">{game?.score_x}</p>
+
+        <div className="game-info mb-5">
+          <div className="turn-indicator text-2xl font-bold mb-5 text-gray-800">{getTurnIndicator()}</div>
+          <div className="score-board flex justify-center gap-10 mb-5">
+            <div className="score-item text-center p-4 border-2 border-gray-800 rounded-md bg-white min-w-[90px]">
+              <div className="score-label text-lg font-bold mb-2 text-gray-800">X</div>
+              <div className="score-value text-3xl font-bold text-gray-800">{game?.score_x}</div>
             </div>
-            <div>
-              <p className="text-xl font-bold">O</p>
-              <p className="text-xl">{game?.score_o}</p>
+            <div className="score-item text-center p-4 border-2 border-gray-800 rounded-md bg-white min-w-[90px]">
+              <div className="score-label text-lg font-bold mb-2 text-gray-800">O</div>
+              <div className="score-value text-3xl font-bold text-gray-800">{game?.score_o}</div>
             </div>
           </div>
+          <button className="reset-btn px-5 py-3 border-2 border-gray-800 bg-gray-800 text-white cursor-pointer text-base font-bold rounded-md transition-all duration-300 hover:bg-gray-600" onClick={resetGame}>
+            Reset Game
+          </button>
         </div>
-        <button className="px-4 py-2 rounded-md bg-blue-500 text-white" onClick={resetGame}>
-          Reset Game
-        </button>
       </div>
-    </main>
+
+      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
+      {game && <GameBoard board={game.board} onCellClick={handleCellClick} winningCells={winningCells} />}
+    </div>
   );
 }
