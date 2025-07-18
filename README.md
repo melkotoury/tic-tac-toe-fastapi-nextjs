@@ -59,22 +59,32 @@ Since you want to use your local PostgreSQL instance, follow these steps:
 
     **Note:** Replace `your_db_username` and `your_db_password` with your actual PostgreSQL username and a strong password.
 
-3.  **Create a `.env` file** in the root of the project and add your database credentials. This file will be used by Docker Compose to set environment variables for the services.
+### Environment Variables
 
-    ```
-    DB_USER=your_db_username
-    DB_PASSWORD=your_db_password
-    DB_NAME=tictactoe_db
-    ```
+Environment variables are crucial for configuring the application. They are kept out of version control for security.
 
-    **IMPORTANT:** Replace `your_db_username` and `your_db_password` with the actual username and password for your PostgreSQL user.
+1.  **Backend Environment Variables:**
+    *   Copy the example file to create your local `.env` file:
+        ```bash
+        cp backend/.env.example backend/.env
+        ```
+    *   Open `backend/.env` and update the database credentials:
+        ```
+        DB_USER=your_db_username
+        DB_PASSWORD=your_db_password
+        DB_NAME=tictactoe_db
+        ```
+        **IMPORTANT:** Replace `your_db_username` and `your_db_password` with the actual username and password for your PostgreSQL user.
 
-### Environment Variables (`.env` vs `.env.example`)
-
-This project uses a single `.env` file at the root for managing environment variables when running with Docker Compose. This file is automatically picked up by `docker compose` and its variables are passed to the respective services (backend and frontend).
-
-*   The **`.env` file at the project root** contains the actual credentials and configuration used by Docker Compose.
-*   The **`.env.example` files** (e.g., `frontend/.env.example`) are provided as **templates** for developers who might want to run individual services (like the frontend or backend) *independently* of the full Docker Compose setup. If you were to run `npm run dev` directly in the `frontend` directory, you would typically create a `.env.local` file from `frontend/.env.example` to configure the frontend's API URL.
+2.  **Frontend Environment Variables:**
+    *   Copy the example file to create your local `.env.local` file:
+        ```bash
+        cp frontend/.env.example frontend/.env.local
+        ```
+    *   Open `frontend/.env.local` and ensure `NEXT_PUBLIC_API_URL` points to your backend service (usually `http://localhost:8000` when running locally via Docker Compose):
+        ```
+        NEXT_PUBLIC_API_URL=http://localhost:8000
+        ```
 
 ### Running the Application
 
@@ -103,6 +113,8 @@ This project uses a single `.env` file at the root for managing environment vari
 │   │   ├── database.py
 │   │   ├── game_logic.py
 │   │   └── main.py
+│   ├── .env (ignored)
+│   ├── .env.example
 │   └── requirements.txt
 ├── frontend
 │   ├── Dockerfile
@@ -112,9 +124,10 @@ This project uses a single `.env` file at the root for managing environment vari
 │   │       └── layout.tsx
 │   │   └── components
 │   │       └── GameBoard.tsx
+│   ├── .env.local (ignored)
+│   ├── .env.example
 │   ├── package.json
 │   └── ...
-├── .env
 ├── .gitignore
 ├── docker-compose.yml
 └── README.md

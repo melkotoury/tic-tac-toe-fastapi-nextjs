@@ -4,18 +4,19 @@ services:
     restart: always
     ports:
       - "8000:8000"
+    env_file:
+      - ./backend/.env
     environment:
       DB_HOST: host.docker.internal # For Docker Desktop (macOS/Windows) to connect to host's PostgreSQL
       DB_PORT: 5432
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-
+    
   frontend:
     build: ./frontend
     restart: always
     ports:
       - "3000:3000"
+    env_file:
+      - ./frontend/.env.local
     environment:
       NEXT_PUBLIC_API_URL: http://backend:8000
     depends_on:
